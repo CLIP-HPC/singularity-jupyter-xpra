@@ -6,6 +6,7 @@ IncludeCmd: no
 code_server_proxy  /code_server_proxy
 environment.yml /environment.yml
 jpyExec /usr/local/bin/jpyExec
+xterm.sh /usr/local/bin/xterm.sh
 
 %environment
         export LC_ALL=C
@@ -35,7 +36,7 @@ baseurl=http://satellite.vbc.ac.at/pulp/repos/CLIP_Batch/Library/custom/OpenHPC/
 enabled=1
 gpgcheck=0
 EOF
-        #yum install -y lmod-ohpc
+        yum install -y lmod-ohpc
         yum install -y gstreamer gstreamer-plugins-base
         #yum install -y https://download1.rstudio.org/desktop/centos7/x86_64/rstudio-1.2.5019-x86_64.rpm
         yum install -y xterm
