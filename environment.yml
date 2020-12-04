@@ -1,0 +1,13 @@
+name: jupyter
+prefix: /srv/jupyter
+channels:
+  - conda-forge
+dependencies:
+  # pin to python 3.8 later has proxy server bug https://github.com/jupyterhub/jupyter-server-proxy/issues/227
+  - python=3.8
+  - jupyterlab=2.2.9
+  - jupyter-server-proxy=1.5.0
+  - pip:
+      # batchspawner is pre-release 1.0.0 rc0
+      - batchspawner==1.0.1
+  - nodejs=13.12.0
