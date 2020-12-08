@@ -3,87 +3,85 @@ From: centos:7
 IncludeCmd: no
 
 %files
-code_server_proxy  /code_server_proxy
-environment.yml /environment.yml
-jpyExec /usr/local/bin/jpyExec
-xterm.sh /usr/local/bin/xterm.sh
+  ohpc.repo /etc/yum.repos.d/
+  xpra.repo /etc/yum.repos.d/
+
+  code_server_proxy  /code_server_proxy
+  environment.yml /environment.yml
+  start /usr/local/bin/
+
+  xterm.sh /usr/local/bin/
+  fiji.sh /usr/local/bin/
+  fiji.desktop /usr/share/applications
+  igv.sh /usr/local/bin/
+  igv.desktop /usr/share/applications
 
 %environment
-        export LC_ALL=C
-        export CONDA_DEFAULT_ENV=/srv/jupyter
+  export LC_ALL=C
+  export CONDA_DEFAULT_ENV=/srv/jupyter
+  export PS1="Singularity [\u@\h \W]\$ "
+
 
 %post
-        rpm --import https://winswitch.org/gpg.asc
-        cd /etc/yum.repos.d/
-        yum install -y curl vim git tmux wget
-        curl -O https://winswitch.org/downloads/CentOS/winswitch.repo
-        yum install -y epel-release
-        yum install -y ocl-icd
-        # manually create nvidia.icd file
-        mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
-        yum install -y xpra
-        yum install -y python2-pip
-        pip install websockify
-        cat <<EOF >/etc/yum.repos.d/openhc.repo
-[ohpc-base]
-name=ohpc-base
-baseurl=http://satellite.vbc.ac.at/pulp/repos/CLIP_Batch/Library/custom/OpenHPC/base/
-enabled=1
-gpgcheck=0
-[ohpc-updates]
-name=ohpc-updates
-baseurl=http://satellite.vbc.ac.at/pulp/repos/CLIP_Batch/Library/custom/OpenHPC/updates/
-enabled=1
-gpgcheck=0
-EOF
-        yum install -y lmod-ohpc
-        yum install -y gstreamer gstreamer-plugins-base
-        #yum install -y https://download1.rstudio.org/desktop/centos7/x86_64/rstudio-1.2.5019-x86_64.rpm
-        yum install -y xterm
-        # centos 7.6/7.7 fvckup (see README)
-        #yum install -y qt5-qtbase qt5-qtbase-gui qt5-qtwebchannel qt5-qtsvg qt5-qtwebkit
-        #yum install -y --enablerepo=cr,epel-testing qt5-qtbase qt5-qtbase-gui qt5-qtwebchannel qt5-qtsvg qt5-qtwebkit
-        #yum install -y tcsh
-        dbus-uuidgen > /etc/machine-id
-        yum clean all
+  yum install -y epel-release
+  yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4
 
-## prep jupyter
+  # WHAT is it?
+  # yum install -y ocl-icd
+  # manually create nvidia.icd file
+  #mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 
-# install conda base
-# adopted from https://hub.docker.com/r/continuumio/anaconda3/dockerfile
-wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh -O /miniconda_install.sh
-bash /miniconda_install.sh -b -p /srv/conda
-rm /miniconda_install.sh
+  # not sure what we need this for, html client?
+  #pip install websockify
 
-ln -s /srv/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
-echo ". /srv/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-echo "conda activate base" >> ~/.bashrc
+  yum install -y gstreamer gstreamer-plugins-base
+  #yum install -y https://download1.rstudio.org/desktop/centos7/x86_64/rstudio-1.2.5019-x86_64.rpm
+  # centos 7.6/7.7 fvckup (see README)
+  #yum install -y qt5-qtbase qt5-qtbase-gui qt5-qtwebchannel qt5-qtsvg qt5-qtwebkit
+  #yum install -y --enablerepo=cr,epel-testing qt5-qtbase qt5-qtbase-gui qt5-qtwebchannel qt5-qtsvg qt5-qtwebkit
+  #yum install -y tcsh
 
-source /etc/profile.d/conda.sh
-conda activate base
-conda clean --all --yes --quiet
+  # we need dbus for xpra
+  dbus-uuidgen > /etc/machine-id
+  yum clean all
+
+  ### prep conda ##############
+
+  # install conda base
+  # adopted from https://hub.docker.com/r/continuumio/anaconda3/dockerfile
+  wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh -O /miniconda_install.sh
+  bash /miniconda_install.sh -b -p /srv/conda
+  rm /miniconda_install.sh
+
+  ln -s /srv/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
+  echo ". /srv/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+  echo "conda activate base" >> ~/.bashrc
+
+  source /etc/profile.d/conda.sh
+  conda activate base
+  conda clean --all --yes --quiet
 
 
-# install jupter
-# setup jupyter conda env
-/srv/conda/bin/conda env create --prefix /srv/jupyter  -f /environment.yml
+  ### install jupter ############
+  # setup jupyter conda env
+  /srv/conda/bin/conda env create --prefix /srv/jupyter  -f /environment.yml
 
-conda activate /srv/jupyter
-conda clean --all --yes --quiet
+  conda activate /srv/jupyter
+  conda clean --all --yes --quiet
 
-# jupyter-server-proxy@v1.5.0
+  # install extension for proxy
+  jupyter labextension install @jupyterlab/server-proxy
+  cd /code_server_proxy
+  pip install .
 
-jupyter labextension install @jupyterlab/server-proxy
+  # back to home
+  cd
 
-cd /code_server_proxy
-pip install .
+  # cleanup
+  jupyter lab clean -y
+  npm cache clean --force
+  conda clean --all -f -y
 
-# back to home
-cd
-jupyter lab clean -y
-npm cache clean --force
-conda clean --all -f -y
-
-#fix-permissions "${CONDA_DIR}"
-
+%help
+  Container to wrap otherwise unusable GUI software: Fiji, IGV (Genome Viewer)
 

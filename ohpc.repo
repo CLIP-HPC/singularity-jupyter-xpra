@@ -1,0 +1,11 @@
+[ohpc-base]
+name=ohpc-base
+baseurl=http://satellite.vbc.ac.at/pulp/repos/CLIP_Batch/Library/custom/OpenHPC/base/
+enabled=1
+gpgcheck=0
+
+[ohpc-updates]
+name=ohpc-updates
+baseurl=http://satellite.vbc.ac.at/pulp/repos/CLIP_Batch/Library/custom/OpenHPC/updates/
+enabled=1
+gpgcheck=0

@@ -2,8 +2,8 @@
 def setup_xpra():
   return {
     #
-    'command': ['xpra', 'start', '--bell=no', '--daemon=no', '--clipboard=yes', '--system-tray=yes', '--exit-with-children=yes', '--no-pulseaudio', '--bind-tcp=0.0.0.0:{port}', '--html=on', '--start-child=/usr/local/bin/xterm.sh'],
-    # we caan take up to xx seconds to get ready
+    'command': ['xpra', 'start-desktop', '--bell=no', '--daemon=no', '--clipboard=yes', '--system-tray=yes', '--mdns=no', '--exit-with-children=no', '--no-pulseaudio', '--bind-tcp=127.0.0.1:{port}', '--html=on'],
+    # we can take up to xx seconds to get ready
     'timeout': 60
   }
 
