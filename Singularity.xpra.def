@@ -6,15 +6,24 @@ IncludeCmd: no
   ohpc.repo /etc/yum.repos.d/
   xpra.repo /etc/yum.repos.d/
 
-  code_server_proxy  /code_server_proxy
+  xpra_proxy  /xpra_proxy
   environment.yml /environment.yml
   start /usr/local/bin/
+
+  Science.directory /usr/share/desktop-directories
+  science.menu /etc/xdg/menus/applications-merged
+  science.menu /science.menu.xml
 
   xterm.sh /usr/local/bin/
   fiji.sh /usr/local/bin/
   fiji.desktop /usr/share/applications
   igv.sh /usr/local/bin/
   igv.desktop /usr/share/applications
+
+  igv64.png /usr/share/icons
+  fiji64.png /usr/share/icons
+
+  xpra_background.png /usr/share/backgrounds/
 
 %environment
   export LC_ALL=C
@@ -24,7 +33,7 @@ IncludeCmd: no
 
 %post
   yum install -y epel-release
-  yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4
+  yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick
 
   # WHAT is it?
   # yum install -y ocl-icd
@@ -71,7 +80,7 @@ IncludeCmd: no
 
   # install extension for proxy
   jupyter labextension install @jupyterlab/server-proxy
-  cd /code_server_proxy
+  cd /xpra_proxy
   pip install .
 
   # back to home
@@ -82,6 +91,8 @@ IncludeCmd: no
   npm cache clean --force
   conda clean --all -f -y
 
+  # last ditch effort for Science menu
+  cp /science.menu.xml /etc/xdg/menus/applications-merged/science.menu
 %help
   Container to wrap otherwise unusable GUI software: Fiji, IGV (Genome Viewer)
 

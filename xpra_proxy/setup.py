@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-  name="jupyter-codeserver",
+  name="jupyter-xpra-proxy",
   # py_modules rather than packages, since we only have 1 file
   py_modules=['xpra'],
   entry_points={

@@ -7,7 +7,7 @@ Type=Application
 Version=1.0
 
 # The name of the application
-Name=Fiji
+Name=Fiji (ImageJ)
 
 # A comment which can/will be used as a tooltip
 Comment=Fiji is just ImageJ
@@ -19,10 +19,10 @@ Comment=Fiji is just ImageJ
 Exec=/usr/local/bin/fiji.sh
 
 # The name of the icon that will be used to display this entry
-Icon=fiji
+Icon=/usr/share/icons/fiji64.png
 
 # Describes whether this application needs to be run in a terminal or not
 Terminal=false
 
 # Describes the categories in which this entry should be shown
-Categories=Science;Image Processing;Image Analysis;Java;
+Categories=Science;Graphics;

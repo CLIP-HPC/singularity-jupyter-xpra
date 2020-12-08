@@ -7,7 +7,7 @@ Type=Application
 Version=1.0
 
 # The name of the application
-Name=IGV
+Name=IGV - Integrative Genomics Viewer
 
 # A comment which can/will be used as a tooltip
 Comment=Integrative Genomics Viewer
@@ -19,10 +19,10 @@ Comment=Integrative Genomics Viewer
 Exec=/usr/local/bin/igv.sh
 
 # The name of the icon that will be used to display this entry
-Icon=igv
+Icon=/usr/share/icons/igv64.png
 
 # Describes whether this application needs to be run in a terminal or not
 Terminal=false
 
 # Describes the categories in which this entry should be shown
-Categories=Java;Science;
+Categories=Biology;Science;
