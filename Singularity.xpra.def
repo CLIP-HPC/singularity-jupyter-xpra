@@ -33,7 +33,7 @@ IncludeCmd: no
 
 %post
   yum install -y epel-release
-  yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick
+  yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick xorg-xsetroot
 
   # WHAT is it?
   # yum install -y ocl-icd
@@ -58,7 +58,7 @@ IncludeCmd: no
 
   # install conda base
   # adopted from https://hub.docker.com/r/continuumio/anaconda3/dockerfile
-  wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh -O /miniconda_install.sh
+  wget --no-verbose https://repo.anaconda.com/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh -O /miniconda_install.sh
   bash /miniconda_install.sh -b -p /srv/conda
   rm /miniconda_install.sh
 
