@@ -5,13 +5,13 @@ IncludeCmd: no
 %files
   ohpc.repo /etc/yum.repos.d/
   xpra.repo /etc/yum.repos.d/
-  
+
   # required for libEGL backend (currently not in use)
   10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
-  
+
   # some sane defaults
   xpra.conf /xpra.conf
-  
+
   xpra_proxy  /xpra_proxy
   environment.yml /environment.yml
   start /usr/local/bin/
@@ -42,16 +42,16 @@ IncludeCmd: no
 
 %post
   yum install -y epel-release
-  yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick xorg-xsetroot
-  
+
+  # WHAT is ocl-icd: for OpenCL ICD loader https://github.com/OCL-dev/ocl-icd
+  yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick xorg-xsetroot ocl-icd clinfo
+
   # VirtuaGL 3.x pre release
   yum install -y glx-utils mesa-dri-drivers.x86_64 mesa-dri-drivers.i686
   yum install -y https://s3.amazonaws.com/virtualgl-pr/dev/linux/VirtualGL-2.6.80.x86_64.rpm https://s3.amazonaws.com/virtualgl-pr/dev/linux/VirtualGL-2.6.80.i386.rpm
 
-  # WHAT is it?
-  # yum install -y ocl-icd
   # manually create nvidia.icd file
-  #mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+  mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 
   # not sure what we need this for, html client?
   #pip install websockify
@@ -64,7 +64,7 @@ IncludeCmd: no
   #yum install -y tcsh
 
   yum clean all
-  
+
   echo "\nclass-instance:vglrun=video" >> /usr/share/xpra/content-type/50_class.conf
   cp /xpra.conf /etc/xpra/
   ### prep conda ##############
