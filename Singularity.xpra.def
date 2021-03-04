@@ -6,6 +6,12 @@ IncludeCmd: no
   ohpc.repo /etc/yum.repos.d/
   xpra.repo /etc/yum.repos.d/
 
+  # required for libEGL backend (currently not in use)
+  10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
+
+  # some sane defaults
+  xpra.conf /xpra.conf
+
   xpra_proxy  /xpra_proxy
   environment.yml /environment.yml
   start /usr/local/bin/
@@ -19,9 +25,12 @@ IncludeCmd: no
   fiji.desktop /usr/share/applications
   igv.sh /usr/local/bin/
   igv.desktop /usr/share/applications
+  glxspheres64.sh /usr/local/bin
+  glxspheres64.desktop /usr/share/applications
 
   igv64.png /usr/share/icons
   fiji64.png /usr/share/icons
+  glxspheres64.png /usr/share/icons
 
   xpra_background.png /usr/share/backgrounds/
 
@@ -29,16 +38,24 @@ IncludeCmd: no
   export LC_ALL=C
   export CONDA_DEFAULT_ENV=/srv/jupyter
   export PS1="Singularity [\u@\h \W]\$ "
-
+  export NVIDIA_DRIVER_CAPABILITIES="all"
 
 %post
   yum install -y epel-release
-  yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick xorg-xsetroot
 
-  # WHAT is it?
-  # yum install -y ocl-icd
+  # install some basic utils, one of these break things
+  # yum install -y mesa-libGL-devel htop iperf nano xorg-x11-font-utils liberation-fonts bc strace ltrace ncdu lsof mesa-libGL-devel libXft man-pages atop iotop iftop sysstat pciutils xorg-x11-font-utils xorg-x11-xauth xkeyboard-config
+  yum install -y htop iperf nano liberation-fonts bc strace ltrace lsof man-pages atop iotop iftop sysstat
+
+  # WHAT is ocl-icd: for OpenCL ICD loader https://github.com/OCL-dev/ocl-icd
+  yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick xorg-xsetroot ocl-icd clinfo
+
+  # VirtuaGL 3.x pre release
+  yum install -y glx-utils mesa-dri-drivers.x86_64 mesa-dri-drivers.i686
+  yum install -y https://s3.amazonaws.com/virtualgl-pr/dev/linux/VirtualGL-2.6.80.x86_64.rpm https://s3.amazonaws.com/virtualgl-pr/dev/linux/VirtualGL-2.6.80.i386.rpm
+
   # manually create nvidia.icd file
-  #mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+  mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 
   # not sure what we need this for, html client?
   #pip install websockify
@@ -50,10 +67,10 @@ IncludeCmd: no
   #yum install -y --enablerepo=cr,epel-testing qt5-qtbase qt5-qtbase-gui qt5-qtwebchannel qt5-qtsvg qt5-qtwebkit
   #yum install -y tcsh
 
-  # we need dbus for xpra
-  dbus-uuidgen > /etc/machine-id
   yum clean all
 
+  echo "\nclass-instance:vglrun=video" >> /usr/share/xpra/content-type/50_class.conf
+  cp /xpra.conf /etc/xpra/
   ### prep conda ##############
 
   # install conda base
