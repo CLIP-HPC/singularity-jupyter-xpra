@@ -43,8 +43,9 @@ IncludeCmd: no
 %post
   yum install -y epel-release
 
-  # install some basic utils
-  yum install -y mesa-libGL-devel htop iperf nano xorg-x11-font-utils liberation-fonts bc strace ltrace ncdu lsof mesa-libGL-devel libXft man-pages atop iotop iftop sysstat pciutils xorg-x11-font-utils xorg-x11-xauth xkeyboard-config
+  # install some basic utils, one of these break things
+  # yum install -y mesa-libGL-devel htop iperf nano xorg-x11-font-utils liberation-fonts bc strace ltrace ncdu lsof mesa-libGL-devel libXft man-pages atop iotop iftop sysstat pciutils xorg-x11-font-utils xorg-x11-xauth xkeyboard-config
+  yum install -y htop iperf nano liberation-fonts bc strace ltrace lsof man-pages atop iotop iftop sysstat
 
   # WHAT is ocl-icd: for OpenCL ICD loader https://github.com/OCL-dev/ocl-icd
   yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick xorg-xsetroot ocl-icd clinfo
