@@ -41,7 +41,7 @@ IncludeCmd: no
   export NVIDIA_DRIVER_CAPABILITIES="all"
 
 %post
-  yum install -y epel-release
+  yum install -y epel-release yum-utils
 
   # install some basic utils, one of these break things
   # yum install -y mesa-libGL-devel htop iperf nano xorg-x11-font-utils liberation-fonts bc strace ltrace ncdu lsof mesa-libGL-devel libXft man-pages atop iotop iftop sysstat pciutils xorg-x11-font-utils xorg-x11-xauth xkeyboard-config
@@ -51,8 +51,9 @@ IncludeCmd: no
   yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick xorg-xsetroot ocl-icd clinfo
 
   # VirtuaGL 3.x pre release
+  yum-config-manager --add-repo=https://virtualgl.org/pmwiki/uploads/Downloads/VirtualGL.repo
   yum install -y glx-utils mesa-dri-drivers.x86_64 mesa-dri-drivers.i686
-  yum install -y https://s3.amazonaws.com/virtualgl-pr/dev/linux/VirtualGL-2.6.80.x86_64.rpm https://s3.amazonaws.com/virtualgl-pr/dev/linux/VirtualGL-2.6.80.i386.rpm
+  yum install -y VirtualGL-2.6.95
 
   # manually create nvidia.icd file
   mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
