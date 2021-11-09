@@ -48,12 +48,13 @@ IncludeCmd: no
   yum install -y htop iperf nano liberation-fonts bc strace ltrace lsof man-pages atop iotop iftop sysstat
 
   # WHAT is ocl-icd: for OpenCL ICD loader https://github.com/OCL-dev/ocl-icd
-  yum install -y curl vim git tmux wget xterm xpra python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick xorg-xsetroot ocl-icd clinfo
+  yum install -y curl vim git tmux wget xterm python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick xorg-xsetroot ocl-icd clinfo
+  yum install -y xpra-3.1.2
 
   # VirtuaGL 3.x pre release
   yum-config-manager --add-repo=https://virtualgl.org/pmwiki/uploads/Downloads/VirtualGL.repo
   yum install -y glx-utils mesa-dri-drivers.x86_64 mesa-dri-drivers.i686
-  yum install -y VirtualGL-2.6.95
+  yum install -y VirtualGL-3.0
 
   # manually create nvidia.icd file
   mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
