@@ -14,7 +14,6 @@ IncludeCmd: no
 
   xpra_proxy  /xpra_proxy
   environment.yml /environment.yml
-  start /usr/local/bin/
 
   Science.directory /usr/share/desktop-directories
   science.menu /etc/xdg/menus/applications-merged
@@ -112,6 +111,17 @@ IncludeCmd: no
 
   # last ditch effort for Science menu
   cp /science.menu.xml /etc/xdg/menus/applications-merged/science.menu
+
+%runscript
+
+source /etc/profile.d/conda.sh
+
+# we're  not stacking the conda environment, who knows what this would cause
+conda activate --no-stack ${JUPYTER_ENV:-/srv/jupyter}
+
+exec $@
+
+
 %help
   Container to wrap otherwise unusable GUI software: Fiji, IGV (Genome Viewer)
 
