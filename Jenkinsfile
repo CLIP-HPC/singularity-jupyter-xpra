@@ -7,6 +7,6 @@ buildSingularityImage([
     pushRegistry: 'singularity.vbc.ac.at',
     pushRegistryNamespace: 'clip',
     pushRegistryCredentials: 'svc-singularity-token',
-    pushBranches: ['develop', 'master', 'RFC-2237-upgrade-jupyterlab'],
+    pushBranches: ['develop', 'master'],
 ])
 

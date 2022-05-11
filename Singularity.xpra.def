@@ -48,7 +48,8 @@ IncludeCmd: no
 
   # WHAT is ocl-icd: for OpenCL ICD loader https://github.com/OCL-dev/ocl-icd
   yum install -y curl vim git tmux wget xterm python2-pip lmod-ohpc xdg-utils python2-pyxdg python-inotify lz4 python2-lz4 ImageMagick xorg-xsetroot ocl-icd clinfo
-  yum install -y xpra-3.1.2
+  # xorg-x11-drv-dummy-0.3.8-1 is required due to ISD-38340
+  yum install -y xorg-x11-drv-dummy-0.3.8-1.xpra3.el7 xpra-3.1.2
 
   # VirtuaGL 3.x pre release
   yum-config-manager --add-repo=https://virtualgl.org/pmwiki/uploads/Downloads/VirtualGL.repo
